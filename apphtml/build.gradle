@@ -1,0 +1,93 @@
+group 'apphtml'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext {
+        springBootVersion = '1.3.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+def packageType = 'jar';
+if(project.hasProperty('packageType')){
+    packageType = project['packageType']
+}
+
+println('packageType: ' + packageType)
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+if(packageType == 'war'){
+    apply plugin: 'war'
+}else{
+    //apply plugin: 'jar'
+}
+
+jar {
+    baseName = 'test_spring_boot'
+    version = '0.0.1-SNAPSHOT'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    //compile.exclude module: ':spring-boot-starter-logging'
+    all*.exclude module : 'spring-boot-starter-logging'
+    if(packageType == 'war'){
+        all*.exclude module : 'spring-boot-starter-tomcat'
+    }
+}
+
+apply plugin: 'application'
+mainClassName = 'com.zlgmcu.Application'
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter')
+
+    //Spring Boot
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "snakeyaml"
+        exclude module: "jackson-databind"
+    }
+
+    compile("org.springframework.boot:spring-boot-starter-log4j")
+
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile('mysql:mysql-connector-java:5.1.9')
+
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    if(packageType == 'jar'){
+        compile("org.springframework.boot:spring-boot-devtools")
+    }
+
+    compile('org.codehaus.groovy:groovy-all:2.4.6')
+    compile('commons-beanutils:commons-beanutils:1.9.2')
+    compile('org.apache.httpcomponents:httpclient:4.5')
+    compile('io.netty:netty-all:4.1.2.Final')
+
+
+    if(packageType == 'war'){
+        providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
+    }
+
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.6'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(GroovyCompile) {
+    options.encoding = 'UTF-8'
+}

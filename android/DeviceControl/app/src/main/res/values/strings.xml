@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">家居控制</string>
+    <string name="app_title">通过网络控制远程设备上的灯</string>
+</resources>

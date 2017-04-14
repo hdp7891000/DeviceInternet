@@ -1,0 +1,93 @@
+<html>
+<head>
+    <style type="text/css">
+		    body{text-align:center;}
+		    div{width:778px;margin:0 auto;background:#fff;text-align:left;}
+    </style>
+    <script src="jquery-3.2.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var args = {
+                        url: 'http://yfm1202.6655.la:9090/api/a7/control?',
+                        cache: false,
+                        dataType: 'json'
+                    }
+
+            $('#lightOn').on('click', function() {
+                args.data    = 'active=put&key=led&value=on'
+                args.success = function(data) {
+                        $('#lightStatus').attr('src', data.value === 'on' ? "image/lamp_on.png" : "image/lamp_off.png")
+                    }
+                $.ajax(args)
+            })
+
+            $('#lightOff').on('click', function() {
+                args.data    = 'active=put&key=led&value=off'
+                args.success = function(data) {
+                        $('#lightStatus').attr('src', data.value === 'on' ? "image/lamp_on.png" : "image/lamp_off.png")
+                    }
+                $.ajax(args)
+            })
+
+            $('#lightQuery').on('click', function() {
+                args.data = 'active=get&key=led'
+                args.success = function(data) {
+                        $('#lightStatus').attr('src', data.value === 'on' ? "image/lamp_on.png" : "image/lamp_off.png")
+                    }
+                $.ajax(args)
+            })
+
+            var QueryLed = function() {
+                setTimeout(function(){
+                    args.data = 'active=get&key=led',
+                    args.success = function(data) {
+                            $('#lightStatus').attr('src', data.value === 'on' ? "image/lamp_on.png" : "image/lamp_off.png")
+                        }
+                    $.ajax(args)
+                    })
+                }, 2000)
+            }
+
+            QueryLed();
+        })
+    </script>
+</head>
+<title>
+控制设备和查询设备的入口
+</title>
+<body>
+<br>
+<br>
+<img id='lightStatus' src="image/lamp_on.png"/>
+<br>
+<br>
+<input type="button" id="lightOn" value="设置LED亮">
+<br><br>
+<input type="button" id="lightOff" value="设置LED灭">
+<br><br>
+<input type="button" id="lightQuery" value="查询LED状态">
+
+<!--<br>-->
+<!--<br>-->
+<!--<br>-->
+
+<!--<form action="http://yfm1202.6655.la:9090/api/a7/control" method="get">-->
+  <!--<input type="hidden"  name="active" value="put">-->
+  <!--<input type="hidden"  name="key" value="led">-->
+  <!--<input type="hidden"  name="value" value="on">-->
+  <!--<input type="submit" value="设置LED亮"  />-->
+<!--</form>-->
+<!--<form action="http://yfm1202.6655.la:9090/api/a7/control" method="get">-->
+  <!--<input type="hidden"  name="active" value="put">-->
+  <!--<input type="hidden"  name="key" value="led">-->
+  <!--<input type="hidden"  name="value" value="off">-->
+  <!--<input type="submit" value="设置LED灭" />-->
+<!--</form>-->
+<!--<form action="http://yfm1202.6655.la:9090/api/a7/control" method="get">-->
+  <!--<input type="hidden"  name="active" value="get">-->
+  <!--<input type="hidden"  name="key" value="led">-->
+  <!--<input type="submit" value="查询LED状态" />-->
+<!--</form>-->
+
+</body>
+</html>
